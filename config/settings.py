@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '50-character-key goes here'
+SECRET_KEY = os.environ['DJ_TMPLT22__SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = json.loads( os.environ['DJ_TMPLT22__DEBUG_JSON'] )  # will be True or False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = json.loads( os.environ['DJ_TMPLT22__ALLOWED_HOSTS'] )  # list
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'x_app',
 ]
 
 MIDDLEWARE = [
@@ -51,10 +52,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+template_dirs = json.loads( os.environ['DJ_TMPLT22__TEMPLATES_JSON'] )
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': template_dirs,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,15 +77,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 ## enabled by default, but disabled here as a reminder that django can be very lightweight
 
-db_path = os.path.join(f'{BASE_DIR}/../x_project_db/', 'x_project_db.sqlite3')
-print( f'db_path, ``{db_path}``' )
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME': db_path,
-    }
-}
+# db_path = os.path.join(f'{BASE_DIR}/../x_project_db/', 'x_project_db.sqlite3')
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#         'NAME': db_path,
+#     }
+# }
+
+DATABASES = json.loads( os.environ['DJ_TMPLT22__DATABASES_JSON'] )
 
 
 # Password validation
@@ -110,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
